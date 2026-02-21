@@ -6,6 +6,7 @@ This is the official repository for the paper **"Physically Grounded Multi-modal
 >
 > **This repository is continuously being updated. We are actively refining the documentation and uploading more checkpoints and experimental data.**
 
+---
 ## 📂 Repository Structure
 
 The file structure and function of the key components are organized as follows:
@@ -24,21 +25,19 @@ CoRAL/
 ├── modify_tokenizer.py   # Utility to modify or extend the model tokenizer
 └── README.md             # Project documentation
 ```
-## ⚙️ System Requirements (系统要求)
 
-### 1. Hardware Requirements (硬件要求)
-<!-- 对应图片第3点：非标准硬件要求 -->
+---
+## ⚙️ System Requirements
+
+### 1. Hardware Requirements
 This project involves large-scale model training/inference and requires high-performance computing resources.
 
 *   **Recommended Hardware:** 
     *   **GPU:** At least one NVIDIA GPU with **80GB VRAM** (or higher).
     *   **Architecture:** Ampere (A100/A800) or Hopper (H100/H800) recommended.
-*   **Tested Hardware:** 
-    *   **GPU:** NVIDIA A800 80GB PCIe
-    *   **Memory:** 80GB Dedicated Video Memory
+    *   **Tested Hardware:** NVIDIA A800 80GB PCIe
 
-### 2. Software & Key Dependencies (软件依赖)
-<!-- 对应图片第1点：所有依赖和版本号 -->
+### 2. Software & Key Dependencies
 The project relies on specific versions of deep learning frameworks. Below are the core dependencies:
 
 *   **Python Version:** Python 3.10+ (Recommended)
@@ -52,20 +51,19 @@ The project relies on specific versions of deep learning frameworks. Below are t
 
 > **Note:** For a complete list of all dependencies, please refer to [requirements.txt](./requirements.txt).
 
-### 3. Tested Environment (测试环境)
-<!-- 对应图片第2点：已测试的版本和环境 -->
+### 3. Tested Environment
 The software has been rigorously tested and verified on the following environment setup:
 
 | Component | Version / Details |
 | :--- | :--- |
-| **OS** | Linux (Ubuntu 20.04/22.04) |
+| **OS** | Linux (Ubuntu 22.04) |
 | **NVIDIA Driver** | **535.104.12** |
 | **CUDA Version** | **12.2** (System-level) |
 | **GPU** | NVIDIA A800 80GB PCIe |
 
 ---
 
-## 🚀 Installation (安装指南)
+## 🚀 Installation
 
 To set up the environment with all the required dependencies, please follow these steps:
 
