@@ -23,7 +23,7 @@ CoRAL/
 ├── main.sh               # Entry point shell script to run the project
 ├── modify_tokenizer.py   # Utility to modify or extend the model tokenizer
 └── README.md             # Project documentation
-
+```
 ## ⚙️ System Requirements (系统要求)
 
 ### 1. Hardware Requirements (硬件要求)
@@ -47,8 +47,8 @@ The project relies on specific versions of deep learning frameworks. Below are t
     *   `torch` == **2.7.0+cu118** (CUDA 11.8 build)
     *   `transformers` == **4.52.4**
     *   `deepspeed` == **0.17.2**
-    *   `unsloth` == **2026.2.1**
-    *   `vllm_client` == **0.3.2.0**
+    *   `rdkit` == **2025.3.3**
+    *   `tokenizers` == **0.22.2**
 
 > **Note:** For a complete list of all dependencies, please refer to [requirements.txt](./requirements.txt).
 
@@ -71,8 +71,8 @@ To set up the environment with all the required dependencies, please follow thes
 
 1.  **Create a virtual environment (Recommended):**
     ```bash
-    conda create -n my_env python=3.10
-    conda activate my_env
+    conda create -n CoRAL python=3.10
+    conda activate CoRAL
     ```
 
 2.  **Install dependencies:**
