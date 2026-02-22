@@ -123,3 +123,65 @@ python -c "import torch; print(torch.__version__)"
   * The installation time is primarily dependent on your internet speed, as the dependencies include large libraries (e.g., PyTorch ~2.5GB, CUDA kernels).
   * Some packages like deepspeed may require JIT compilation during the first run or installation, which can take a few extra minutes depending on your CPU.
 
+---
+## 🧪 Demo & Usage Examples
+
+This section provides instructions on how to run the demos for **Next Elementary Product Prediction** and **Overall Reaction Prediction**. 
+
+Ensure you have activated your environment before running these commands.
+
+### 📥 Download Model Weights
+
+Before running the demos, you need to download the pre-trained model weights from our Hugging Face repository.
+
+**Hugging Face Repo:** [🤗 **yhLi/CoRAL-8B**](https://huggingface.co/yhLi/CoRAL-8B)
+
+You can download the models using Hugging Face CLI (Recommended):
+
+Ensure `huggingface_hub` is installed (included in `requirements.txt`), then run:
+
+```bash
+# Create a directory for checkpoints
+mkdir -p checkpoints
+
+# Download the model to the 'checkpoints' folder
+huggingface-cli download your-username/your-model-name --local-dir checkpoints/your-model-name --local-dir-use-symlinks False
+```
+
+### Case 1: Next Elementary Product Prediction (NEPP)
+
+This demo predicts the immediate next elementary step in a reaction mechanism given a set of reactants.
+
+**Run the demo:**
+```bash
+python demo_step_pred.py --input "YOUR_SMILES_STRING_HERE"
+# Or simply run the default script:
+python demo_step_pred.py
+```
+
+**Expected Output:**
+
+Upon running the script, the model will load the weights and output the predicted elementary step product with its confidence score.
+
+**Expected Run Time:**
+
+GPU (e.g., A800): < 10 seconds.
+
+### Case 2: Reaction Prediction (RP)
+
+This demonstration predicts the final products of chemical reaction sequences, as well as the overall elementary reaction pathways.
+
+**Run the demo:**
+```
+python demo_reaction_pred.py --input "YOUR_Reactants_SMILES"
+# Or run with default examples:
+python demo_reaction_pred.py
+```
+
+**Expected Output:**
+
+The script will output the predicted final product SMILES string.
+
+**Expected Run Time:**
+
+GPU (e.g., A800): < 40 seconds.
