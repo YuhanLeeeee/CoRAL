@@ -132,20 +132,15 @@ Ensure you have activated your environment before running these commands.
 
 ### 📥 Download Model Weights
 
-Before running the demos, you need to download the pre-trained model weights from our Hugging Face repository.
-
-**Hugging Face Repo:** [🤗 **yhLi/CoRAL-8B**](https://huggingface.co/yhLi/CoRAL-8B)
+Before running the demos, you need to download the pre-trained model weights from our Hugging Face repository: [🤗 **yhLi/CoRAL-8B**](https://huggingface.co/yhLi/CoRAL-8B)
 
 You can download the models using Hugging Face CLI (Recommended):
 
 Ensure `huggingface_hub` is installed (included in `requirements.txt`), then run:
 
 ```bash
-# Create a directory for checkpoints
-mkdir -p checkpoints
-
 # Download the model to the 'checkpoints' folder
-huggingface-cli download your-username/your-model-name --local-dir checkpoints/your-model-name --local-dir-use-symlinks False
+huggingface-cli download --resume-download yhLi/CoRAL-8B --local-dir checkpoints/CoRAL-8B
 ```
 
 ### Case 1: Next Elementary Product Prediction (NEPP)
