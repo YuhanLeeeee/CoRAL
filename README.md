@@ -67,21 +67,59 @@ The software has been rigorously tested and verified on the following environmen
 
 To set up the environment with all the required dependencies, please follow these steps:
 
-1.  **Create a virtual environment (Recommended):**
-    ```bash
-    conda create -n CoRAL python=3.10
-    conda activate CoRAL
-    ```
+Follow these steps to set up the environment and install dependencies via the command line.
 
-2.  **Install dependencies:**
-    Run the following command to install all packages listed in `requirements.txt`.
-    
-    ```bash
-    pip install -r requirements.txt
-    ```
+### **Step 1: Clone the repository**
+```bash
+git clone https://github.com/YuhanLeeeee/CoRAL.git
+cd CoRAL
+```
 
-    *Note: Since `torch` specifies a local version identifier (`+cu118`), ensure your pip allows version specifiers or use the extra index URL if necessary:*
-    ```bash
-    pip install torch==2.7.0+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
-    pip install -r requirements.txt
-    ```
+### **Step 2: Create a Virtual Environment (Recommended)**
+
+Since this project requires specific versions of deep learning frameworks (PyTorch 2.7, etc.), we highly recommend using Conda to isolate the environment.
+
+```bash
+# Create a new environment with Python 3.10
+conda create -n CoRAL python=3.10
+
+# Activate the environment
+conda activate CoRAL
+```
+
+### **Step 3: Install Dependencies**
+
+Install all required packages listed in requirements.txt.
+
+```bash
+# Upgrade pip to ensure it can handle modern wheels
+pip install --upgrade pip
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+*Note: Since `torch` specifies a local version identifier (`+cu118`), ensure your pip allows version specifiers or use the extra index URL if necessary:*
+
+```bash
+pip install torch==2.7.0+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
+pip install -r requirements.txt
+```
+### **Step 4: Verify Installation**
+
+Run the following command to check if the environment is set up correctly:
+
+```bash
+python your_main_script.py --help
+# Or check version
+python -c "import torch; print(torch.__version__)"
+```
+
+### **Typical Install Time**
+
+* Estimated Time: 15 - 30 minutes
+* Factors:
+  * Standard Desktop (8-core CPU, 16GB RAM): Approximately 20 minutes.
+  * The installation time is primarily dependent on your internet speed, as the dependencies include large libraries (e.g., PyTorch ~2.5GB, CUDA kernels).
+  * Some packages like deepspeed may require JIT compilation during the first run or installation, which can take a few extra minutes depending on your CPU.
+
