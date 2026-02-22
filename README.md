@@ -240,44 +240,46 @@ This section describes how to run the model on your own datasets for batch infer
 
 To evaluate or use the model on your custom data, you must format your input file as a **JSONL (JSON Lines)** file. Each line should be a valid JSON object containing the necessary fields.
 
-**Required Fields:**
+Taking the **NEPP (Next Elementary Product Prediction)** task as an example, your dataset must strictly follow this structure:
 *   `id` (optional): Unique identifier for the sample.
 *   `SMILES`: The reaction SMILES string (used for fingerprint generation).
 *   `messages`: A list containing the prompt structure compatible with the LLM (Qwen template).
+*   `task_type`: Specified prediction task.
 
-**Example format (`my_dataset.jsonl`):**
+**Example format (`./test_benchmarks/chemcotbench/nepp-fp.jsonl`):**
 ```json
-{"id": 1, "SMILES": "CC(=O)OC.O", "messages": [{"role": "system", "content": "You are a chemical expert."}, {"role": "user", "content": "Predict the next step for: CC(=O)OC.O"}]}
-{"id": 2, "SMILES": "c1ccccc1Br.CC(C)MgBr", "messages": [{"role": "system", "content": "You are a chemical expert."}, {"role": "user", "content": "Predict the product for: c1ccccc1Br.CC(C)MgBr"}]}
+{"messages": [{"role": "user", "content": "Your task is to act as an experienced chemist and predict the products of the next elementary reaction step in an ongoing multi-step reaction. You will be given the overall starting materials and reagents for the entire reaction, a history of all previous elementary steps, and the reactants for the current step. Based on this complete context, you must deduce the products formed from the current reactants.\n\nInput:\nA JSON object containing the following three key pieces of information:\n1.overall_reactants: The SMILES strings for the initial reactants and reagents of the entire reaction, separated by ..\n2.previous_steps: A list of objects representing the elementary steps that have already occurred. Each object contains its reactants and products. This list can be empty (if this is the first step).\n3.current_reactants: The SMILES string(s) of the reactants for the current elementary step that you need to predict.\n\nOutput:\nYou must predict the products formed from the current_reactants under the given reaction context. The output SMILES must be valid and chemically reasonable. Do not provide any additional information beyond the requested SMILES string(s). The answer must be in a JSON format, containing only the reactants and products of the next step.\n\nQuestion:\nReaction Context and Current Step\n{\n  \"overall_reactants\": \"COC(=O)c1ccccc1-c1ccc(Cl)c(C(=O)NCC2(C)CCCCCC2)c1\",\n  \"previous_steps\": [\n    \"Elementary Step 1\": {\n        \"reactants\": \"O[K].COC(=O)c1ccccc1-c1ccc(Cl)c(C(=O)NCC2(C)CCCCCC2)c1\",\n        \"products\": \"COC([O-])(O)c1ccccc1-c1ccc(Cl)c(C(=O)NCC2(C)CCCCCC2)c1.[K+]\",\n        \"reaction_fingerprints\": \"<FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN><FP_TOKEN>\"\n    }\n],\n  \"current_reactants\": \"COC([O-])(O)c1ccccc1-c1ccc(Cl)c(C(=O)NCC2(C)CCCCCC2)c1\"\n}\n\nAnswer:\n{  \n  \"Elementary Step i\": {\n    \"reactants\": \"...\",\n    \"products\": \"...\",\n  }\n} /no_think"}], "gt": "C[O-].CC1(CNC(=O)c2cc(-c3ccccc3C(=O)O)ccc2Cl)CCCCCC1", "task_type": "nepp", "SMILES": [{"idx": "1", "reactants": "O[K].COC(=O)c1ccccc1-c1ccc(Cl)c(C(=O)NCC2(C)CCCCCC2)c1", "products": "COC([O-])(O)c1ccccc1-c1ccc(Cl)c(C(=O)NCC2(C)CCCCCC2)c1.[K+]"}]}
 ```
 
 ### 2. Running Batch Inference
 
-Use the inference.py script (refactored from the reference code) to process your .jsonl file. This script supports multi-modal inputs (SMILES fingerprints + Text) and will save the predictions to the output directory.
+Use the inference.py script to process your .jsonl file. This script supports multi-modal inputs (SMILES fingerprints + Text) and will save the predictions to the output directory.
 ```
 python inference.py \
-  --inference_data_path ./data/my_dataset.jsonl \
-  --model_path ./checkpoints/Qwen2.5-Mechanism \
+  --inference_data_path ./test_benchmarks/chemcotbench/nepp-fp.jsonl \
+  --model_path ./checkpoints/CoRAL-8B \
   --output_dir ./outputs \
-  --temperature 0.3 \
+  --temperature 0.3
+  --count 1
   --num_beam 1
 ```
 
 ### 3. Arguments Explained
 
 You can adjust the generation parameters to control the diversity and quality of the predictions.
-Argument	Type	Default	Description
---inference_data_path	str	Required	Path to your custom .jsonl input file.
---model_path	str	./checkpoints	Path to the downloaded model weights.
---fp_model_path	str	./checkpoints/...	Path to the pre-trained Fingerprint Projector weights.
---output_dir	str	./outputs	Directory where the result .jsonl file will be saved.
---temperature	float	0.3	Controls randomness. Lower values are more deterministic.
---count	int	3	Number of generation attempts per sample.
---num_beam	int	1	Beam search size. Set >1 for better quality but slower speed.
+
+| Argument | Shorthand | Type | Default | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| `--inference_data_path` | `-i` | `str` | - | **Required.** Path to the input dataset file (must be in `.jsonl` format). |
+| `--model_path` | - | `str` | `./checkpoints/CoRAL-8B` | Path to the main LLM checkpoint folder. |
+| `--output_dir` | - | `str` | `./outputs` | Directory where the prediction results will be saved. |
+| `--temperature` | `-t` | `float` | `0.3` | Controls randomness in generation. Lower values (e.g., 0.1) make the model more deterministic; higher values (e.g., 0.7) make it more creative. |
+| `--count` | `-cnt` | `int` | `3` | The number of inference attempts per sample. Useful for generating multiple candidates for complex reactions. |
+| `--num_beam` | `-n` | `int` | `1` | Beam search size. Increasing this (e.g., to 3 or 5) explores more paths but slows down inference speed significantly. |
 
 ### 4. Output Format
 
 The script will generate a new .jsonl file in the --output_dir. Each line will contain the original input index and the model's generated response:
 ```
-{"response": "<think>...</think> {\"final_product\": \"...\"}", "idx": 1}
+{'response': '<think>\n\n</think>\n\n\n    {\n      "Elementary Step 6": {\n        "reactants": "CCN=C=NCCCN(C)C.O=C(O)c1ccc(Oc2ccc(OCc3ccccc3)cc2)cc1",\n        "products": "CCN=C=[NH+]CCCN(C)C.O=C([O-])c1ccc(Oc2ccc(OCc3ccccc3)cc2)cc1",\n      }\n    }\n    ', 'idx': 0}
 ```
