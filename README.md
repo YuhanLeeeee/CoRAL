@@ -149,14 +149,28 @@ This demo predicts the immediate next elementary step in a reaction mechanism gi
 
 **Run the demo:**
 ```bash
-python demo_step_pred.py --input "YOUR_SMILES_STRING_HERE"
-# Or simply run the default script:
-python demo_step_pred.py
+python demo_NEPP.py
 ```
 
 **Expected Output:**
 
-Upon running the script, the model will load the weights and output the predicted elementary step product with its confidence score.
+After running the script, the model will load the weights and output the predicted elementary reaction products based on the previously input elementary reaction steps and the reactants of the current elementary reaction:
+
+```
+================================================================================
+                              ✨ Elementary Step 6
+================================================================================
+
+[INPUT REACTANTS]:
+CCN=C=NCCCN(C)C.O=C(O)c1ccc(Oc2ccc(OCc3ccccc3)cc2)cc1
+
+--------------------------------------------------------------------------------
+
+[PREDICTED PRODUCTS]:
+CCN=C=[NH+]CCCN(C)C.O=C([O-])c1ccc(Oc2ccc(OCc3ccccc3)cc2)cc1
+================================================================================
+
+```
 
 **Expected Run Time:**
 
@@ -168,15 +182,102 @@ This demonstration predicts the final products of chemical reaction sequences, a
 
 **Run the demo:**
 ```
-python demo_reaction_pred.py --input "YOUR_Reactants_SMILES"
-# Or run with default examples:
-python demo_reaction_pred.py
+python demo_RP.py
 ```
 
 **Expected Output:**
 
 The script will output the predicted final product SMILES string.
 
+```
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    ⚛️  REACTION MECHANISM ANALYSIS REPORT                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Found 5 elementary steps in reasoning process...
+
+▶ Elementary Step 1
+  Input : Cc1ccc(C)c2c(C(C)C)cc(O)nc12.O=P(Cl)(Cl)Cl.Cc1ccccc1
+  Output: Cc1ccccc1.Cc1ccc(C)c2c(C(C)C)cc([OH+]P([O-])(Cl)(Cl)Cl)nc12
+      ↓ (proceeds to next step)
+----------------------------------------
+▶ Elementary Step 2
+  Input : Cc1ccc(C)c2c(C(C)C)cc([OH+]P([O-])(Cl)(Cl)Cl)nc12.Cc1ccccc1
+  Output: Cc1ccccc1.Cc1ccc(C)c2c(C(C)C)cc([OH+]P(=O)(Cl)Cl)nc12.[Cl-]
+      ↓ (proceeds to next step)
+----------------------------------------
+▶ Elementary Step 3
+  Input : Cc1ccccc1.Cc1ccc(C)c2c(C(C)C)cc([OH+]P(=O)(Cl)Cl)nc12.[Cl-]
+  Output: Cc1ccccc1.[Cl-].Cc1ccc(C)c2c(C(C)C)cc(OP(=O)(Cl)Cl)nc12
+      ↓ (proceeds to next step)
+----------------------------------------
+▶ Elementary Step 4
+  Input : Cc1ccc(C)c2c(C(C)C)cc(OP(=O)(Cl)Cl)nc12.Cc1ccccc1.[Cl-]
+  Output: O=P(=O)Cl.Cc1ccccc1.Cc1ccc(C)c2c(C(C)C)cc(Cl)nc12.[Cl-]
+      ↓ (proceeds to next step)
+----------------------------------------
+▶ Elementary Step 5
+  Input : O=P(=O)Cl.Cc1ccccc1.Cc1ccc(C)c2c(C(C)C)cc(Cl)nc12.[Cl-]
+  Output: Cc1ccc(C)c2c(C(C)C)cc(Cl)nc12.Cc1ccccc1.[Cl-].O=P(=O)Cl
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          ✨ FINAL PREDICTION RESULT                          ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+      SMILES: Cc1ccc(C)c2c(C(C)C)cc(Cl)nc12.Cc1ccccc1.[Cl-].O=P(=O)Cl
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
 **Expected Run Time:**
 
 GPU (e.g., A800): < 40 seconds.
+
+---
+## 🔬 Instructions for Use
+
+This section describes how to run the model on your own datasets for batch inference.
+
+### 1. Data Preparation
+
+To evaluate or use the model on your custom data, you must format your input file as a **JSONL (JSON Lines)** file. Each line should be a valid JSON object containing the necessary fields.
+
+**Required Fields:**
+*   `id` (optional): Unique identifier for the sample.
+*   `SMILES`: The reaction SMILES string (used for fingerprint generation).
+*   `messages`: A list containing the prompt structure compatible with the LLM (Qwen template).
+
+**Example format (`my_dataset.jsonl`):**
+```json
+{"id": 1, "SMILES": "CC(=O)OC.O", "messages": [{"role": "system", "content": "You are a chemical expert."}, {"role": "user", "content": "Predict the next step for: CC(=O)OC.O"}]}
+{"id": 2, "SMILES": "c1ccccc1Br.CC(C)MgBr", "messages": [{"role": "system", "content": "You are a chemical expert."}, {"role": "user", "content": "Predict the product for: c1ccccc1Br.CC(C)MgBr"}]}
+```
+
+### 2. Running Batch Inference
+
+Use the inference.py script (refactored from the reference code) to process your .jsonl file. This script supports multi-modal inputs (SMILES fingerprints + Text) and will save the predictions to the output directory.
+```
+python inference.py \
+  --inference_data_path ./data/my_dataset.jsonl \
+  --model_path ./checkpoints/Qwen2.5-Mechanism \
+  --output_dir ./outputs \
+  --temperature 0.3 \
+  --num_beam 1
+```
+
+### 3. Arguments Explained
+
+You can adjust the generation parameters to control the diversity and quality of the predictions.
+Argument	Type	Default	Description
+--inference_data_path	str	Required	Path to your custom .jsonl input file.
+--model_path	str	./checkpoints	Path to the downloaded model weights.
+--fp_model_path	str	./checkpoints/...	Path to the pre-trained Fingerprint Projector weights.
+--output_dir	str	./outputs	Directory where the result .jsonl file will be saved.
+--temperature	float	0.3	Controls randomness. Lower values are more deterministic.
+--count	int	3	Number of generation attempts per sample.
+--num_beam	int	1	Beam search size. Set >1 for better quality but slower speed.
+
+### 4. Output Format
+
+The script will generate a new .jsonl file in the --output_dir. Each line will contain the original input index and the model's generated response:
+```
+{"response": "<think>...</think> {\"final_product\": \"...\"}", "idx": 1}
+```
