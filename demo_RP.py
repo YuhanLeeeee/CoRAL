@@ -9,7 +9,7 @@ from codebook.codebook_train import model as fp_model
 from rdkit.Chem.rdFingerprintGenerator import GetMorganGenerator
 from rdkit import Chem
 from swift.llm import RequestConfig, InferRequest
-from local_swift.swift_ptengine import PtEngine
+from customized_swift.swift_ptengine import PtEngine
 from utils import parse_mechanism_output
 
 temperature = 0.3

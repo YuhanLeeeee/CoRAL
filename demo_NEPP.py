@@ -10,7 +10,7 @@ from codebook.codebook_train import model as fp_model
 from rdkit.Chem.rdFingerprintGenerator import GetMorganGenerator
 from rdkit import Chem
 from swift.llm import RequestConfig, InferRequest
-from local_swift.swift_ptengine import PtEngine
+from customized_swift.swift_ptengine import PtEngine
 
 temperature = 0.3
 count = 1
@@ -38,7 +38,7 @@ def get_fp(smiles_data):
     return fp
 
 
-inference_data_path = './ChemCoT/chemcotbench/reaction/nepp-fp.jsonl'
+inference_data_path = './test_benchmarks/chemcotbench/nepp-fp.jsonl'
 model_id_or_path = './checkpoints/CoRAL-8B'  # Qwen3-8B
 fp_model_path = f"{model_id_or_path}/fp_model_params.pth"
 

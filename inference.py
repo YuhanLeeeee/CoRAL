@@ -13,13 +13,13 @@ from rdkit.Chem.rdFingerprintGenerator import GetMorganGenerator
 from rdkit import Chem
 from tqdm import tqdm
 from swift.llm import RequestConfig, InferRequest
-from local_swift.swift_ptengine import PtEngine
+from customized_swift.swift_ptengine import PtEngine
 
 import argparse
 
 parser = argparse.ArgumentParser(description="parser")
 
-parser.add_argument("-i", "--inference_data_path", type=str)
+parser.add_argument("-i", "--inference_data_path", type=str, default="./test_benchmarks/chemcotbench/nepp-fp.jsonl")
 parser.add_argument("--model_path", type=str, default="./checkpoints/CoRAL-8B")
 parser.add_argument("--output_dir", type=str, default="./outputs")
 parser.add_argument("-t", "--temperature", type=float, default=0.3)
@@ -96,6 +96,7 @@ with open(save_path, 'w', encoding='UTF-8') as f:
                 for resp in resp_list:
                     predict = resp.choices[0].message.content
                     result = {'response': predict, 'idx': idx}
+                    results.append(result)
 
                     json_line = json.dumps(result)
                     f.write(json_line + '\n')
