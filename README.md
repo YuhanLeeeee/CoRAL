@@ -1,5 +1,10 @@
 # CoRAL: Physically Grounded Multi-modal Reasoning for Organic Reaction Mechanism Prediction
 
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.7.0-e14a2d)
+![License](https://img.shields.io/badge/License-MIT-brightgreen)
+![Paper](https://img.shields.io/badge/Paper-CC_BY_4.0-orange)
+
 This is the official repository for the paper **"Physically Grounded Multi-modal Reasoning for Organic Reaction Mechanism Prediction"**.
 
 > ⚠️ **Note**
