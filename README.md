@@ -7,6 +7,9 @@
 
 This is the official repository for the paper **"Physically Grounded Multi-modal Reasoning for Organic Reaction Mechanism Prediction"**.
 
+![image](https://github.com/YuhanLeeeee/CoRAL/blob/main/assets/image.png)
+
+
 > ⚠️ **Note**
 >
 > **This repository is continuously being updated. We are actively refining the documentation and uploading more checkpoints and experimental data.**
