@@ -2,6 +2,7 @@ import os
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 import json
+import random
 from swift.llm import get_model_tokenizer, get_template
 from swift.utils import get_logger
 import torch
@@ -61,7 +62,7 @@ request_config = RequestConfig(max_tokens=max_length, temperature=temperature)
 with open(inference_data_path, 'r') as f:
     data = [json.loads(line) for line in f]
 
-row = data[14]
+row = random.sample(data, 1)
 messages = row['messages']
 if "SMILES" in row.keys():
     messages[0]['fp'] = get_fp(row['SMILES'])
@@ -70,3 +71,4 @@ resp_list = engine.infer(infer_requests, request_config)
 for resp in resp_list:
     predict = resp.choices[0].message.content
     parse_mechanism_output(predict)
+
