@@ -198,41 +198,46 @@ python demo_RP.py
 The script will output the predicted final product SMILES string.
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    ⚛️  REACTION MECHANISM ANALYSIS REPORT                    ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                    ⚛️  REACTION MECHANISM ANALYSIS REPORT                                                                            ║
+╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
-Found 5 elementary steps in reasoning process...
+Found 6 elementary steps in reasoning process...
 
 ▶ Elementary Step 1
-  Input : Cc1ccc(C)c2c(C(C)C)cc(O)nc12.O=P(Cl)(Cl)Cl.Cc1ccccc1
-  Output: Cc1ccccc1.Cc1ccc(C)c2c(C(C)C)cc([OH+]P([O-])(Cl)(Cl)Cl)nc12
+  Input : C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCNC(=O)[C@@H]1CCCN1C(=O)OC(C)(C)C.ClCCl.O=C(O)C(F)(F)F
+  Output: C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCNC(=O)[C@@H]1CCCN1C(=[OH+])OC(C)(C)C.ClCCl.O=C([O-])C(F)(F)F
       ↓ (proceeds to next step)
 ----------------------------------------
 ▶ Elementary Step 2
-  Input : Cc1ccc(C)c2c(C(C)C)cc([OH+]P([O-])(Cl)(Cl)Cl)nc12.Cc1ccccc1
-  Output: Cc1ccccc1.Cc1ccc(C)c2c(C(C)C)cc([OH+]P(=O)(Cl)Cl)nc12.[Cl-]
+  Input : C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCNC(=O)[C@@H]1CCCN1C(=[OH+])OC(C)(C)C.ClCCl.O=C([O-])C(F)(F)F
+  Output: C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCNC(=O)[C@@H]1CCCN1C(=O)O.C[C+](C)C.ClCCl.O=C([O-])C(F)(F)F
       ↓ (proceeds to next step)
 ----------------------------------------
 ▶ Elementary Step 3
-  Input : Cc1ccccc1.Cc1ccc(C)c2c(C(C)C)cc([OH+]P(=O)(Cl)Cl)nc12.[Cl-]
-  Output: Cc1ccccc1.[Cl-].Cc1ccc(C)c2c(C(C)C)cc(OP(=O)(Cl)Cl)nc12
+  Input : C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCNC(=O)[C@@H]1CCCN1C(=O)O.C[C+](C)C.ClCCl.O=C([O-])C(F)(F)F
+  Output: C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCNC(=O)[C@@H]1CCCN1C(=O)[O-].C[C+](C)C.ClCCl.O=C(O)C(F)(F)F
       ↓ (proceeds to next step)
 ----------------------------------------
 ▶ Elementary Step 4
-  Input : Cc1ccc(C)c2c(C(C)C)cc(OP(=O)(Cl)Cl)nc12.Cc1ccccc1.[Cl-]
-  Output: O=P(=O)Cl.Cc1ccccc1.Cc1ccc(C)c2c(C(C)C)cc(Cl)nc12.[Cl-]
+  Input : C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCNC(=O)[C@@H]1CCCN1C(=O)[O-].C[C+](C)C.ClCCl.O=C(O)C(F)(F)F
+  Output: C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCNC(=O)[C@@H]1CCC[N-]1.C[C+](C)C.ClCCl.O=C(O)C(F)(F)F.O=C=O
       ↓ (proceeds to next step)
 ----------------------------------------
 ▶ Elementary Step 5
-  Input : O=P(=O)Cl.Cc1ccccc1.Cc1ccc(C)c2c(C(C)C)cc(Cl)nc12.[Cl-]
-  Output: Cc1ccc(C)c2c(C(C)C)cc(Cl)nc12.Cc1ccccc1.[Cl-].O=P(=O)Cl
+  Input : C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCNC(=O)[C@@H]1CCC[N-]1.C[C+](C)C.ClCCl.O=C(O)C(F)(F)F.O=C=O
+  Output: C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCNC(=O)[C@@H]1CCCN1.C[C+](C)C.ClCCl.O=C([O-])C(F)(F)F.O=C=O
+      ↓ (proceeds to next step)
+----------------------------------------
+▶ Elementary Step 6
+  Input : C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCNC(=O)[C@@H]1CCCN1.C[C+](C)C.ClCCl.O=C([O-])C(F)(F)F.O=C=O
+  Output: C=C(C)C.C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCNC(=O)[C@@H]1CCCN1.ClCCl.O=C(O)C(F)(F)F.O=C=O
 
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                          ✨ FINAL PREDICTION RESULT                          ║
-╠══════════════════════════════════════════════════════════════════════════════╣
-      SMILES: Cc1ccc(C)c2c(C(C)C)cc(Cl)nc12.Cc1ccccc1.[Cl-].O=P(=O)Cl
-╚══════════════════════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                          ✨ FINAL PREDICTION RESULT                                                                                  ║
+╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+      SMILES: C=C(C)C.C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCNC(=O)[C@@H]1CCCN1.ClCCl.O=C(O)C(F)(F)F.O=C=O
+╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 ```
 
 **Expected Run Time:**
