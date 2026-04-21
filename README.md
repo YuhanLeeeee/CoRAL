@@ -9,6 +9,7 @@ This is the official repository for the paper **"Physically Grounded Multi-modal
 
 ![image](https://github.com/YuhanLeeeee/CoRAL/blob/main/assets/image.png)
 
+[![video](https://github.com/YuhanLeeeee/CoRAL/blob/main/assets/video_page.jpg)](https://github.com/YuhanLeeeee/CoRAL/blob/main/assets/video.mp4)
 
 > ⚠️ **Note**
 >
